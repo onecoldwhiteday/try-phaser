@@ -5,41 +5,46 @@ export class Start extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', 'assets/space.png');
-        this.load.image('logo', 'assets/phaser.png');
+        this.load.image('background', 'assets/background.png');
+        this.load.image('trees', 'assets/trees.png');
+        this.load.image('stone', 'assets/stonge.png');
+        this.load.image('bush', 'assets/bush.png');
 
-        //  The ship sprite is CC0 from https://ansimuz.itch.io - check out his other work!
-        this.load.spritesheet('ship', 'assets/spaceship.png', { frameWidth: 176, frameHeight: 96 });
+        this.load.spritesheet('deer', 'assets/deer.png', { frameWidth: 461, frameHeight: 367 });
     }
 
     create() {
+        // movement illusion & bg
         this.background = this.add.tileSprite(640, 360, 1280, 720, 'background');
+        this.trees = this.add.tileSprite(640, 361, 1280, 720, 'trees');
 
-        const logo = this.add.image(640, 200, 'logo');
+        // controls
+        this.cursorKeys = this.input.keyboard.createCursorKeys(); 
 
-        const ship = this.add.sprite(640, 360, 'ship');
+        // obstacles
+        this.obstacle = this.add.tileSprite('stone');
 
-        ship.anims.create({
-            key: 'fly',
-            frames: this.anims.generateFrameNumbers('ship', { start: 0, end: 2 }),
+        // character
+        const deer = this.add.sprite(480, 359, 461, 332, 'deer');
+        deer.setScale(.8);
+
+        deer.anims.create({
+            key: 'run',
+            frames: this.anims.generateFrameNumbers('deer', { start: 0, end: 8.5 }),
             frameRate: 15,
             repeat: -1
         });
 
-        ship.play('fly');
-
-        this.tweens.add({
-            targets: logo,
-            y: 400,
-            duration: 1500,
-            ease: 'Sine.inOut',
-            yoyo: true,
-            loop: -1
-        });
+        deer.play('run');
+        this.deer = deer;
     }
 
     update() {
-        this.background.tilePositionX += 8;
+        this.trees.tilePositionX += 3;
+
+        if (this.cursorKeys.space.isUp) {
+           this.deer.setY = 480;
+        }
     }
     
 }
